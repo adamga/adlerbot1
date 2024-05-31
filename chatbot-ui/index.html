@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot UI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="chat-container">
+        <div id="response-area" class="scrollable">
+            <!-- Messages will be displayed here -->
+        </div>
+        <input type="text" id="user-input" placeholder="Type your message here...">
+        <button id="send-button">Send</button>
+    </div>
+
+    <script>
+        document.getElementById('send-button').addEventListener('click', function() {
+            const userInput = document.getElementById('user-input').value;
+            // Send userInput to the server and handle the response
+            // This part will be implemented to communicate with the server-side API
+            console.log("Message sent: " + userInput); // Placeholder for actual send operation
+        });
+    </script>
+</body>
+</html>
