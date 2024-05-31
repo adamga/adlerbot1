@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Azure;
+using Azure.AI.TextAnalytics;
 
 namespace ServerApi.Controllers
 {
@@ -10,12 +13,20 @@ namespace ServerApi.Controllers
         // This is a simple in-memory store for chat messages
         private static readonly List<string> messages = new List<string>();
 
+        private readonly TextAnalyticsClient _textAnalyticsClient;
+
+        public ChatController(TextAnalyticsClient textAnalyticsClient)
+        {
+            _textAnalyticsClient = textAnalyticsClient;
+        }
+
         // POST api/chat/send
         [HttpPost("send")]
-        public ActionResult SendMessage([FromBody] string message)
+        public async Task<ActionResult> SendMessage([FromBody] string message)
         {
-            messages.Add(message);
-            return Ok("Message received");
+            var response = await CallAzureOpenAI(message);
+            messages.Add(response);
+            return Ok("Message received and processed");
         }
 
         // GET api/chat/receive
@@ -23,6 +34,13 @@ namespace ServerApi.Controllers
         public ActionResult<IEnumerable<string>> ReceiveMessages()
         {
             return Ok(messages);
+        }
+
+        private async Task<string> CallAzureOpenAI(string message)
+        {
+            // This method should implement the call to Azure OpenAI and return the response
+            // Placeholder for Azure OpenAI call
+            return $"Response to '{message}' from Azure OpenAI";
         }
     }
 }
