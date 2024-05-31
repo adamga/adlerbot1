@@ -32,3 +32,19 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
     httpsOnly: true
   }
 }
+
+// Adding Azure Cognitive Services with OpenAI API
+resource cognitiveServices 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
+  name: 'adlerbot1OpenAIService'
+  location: resourceGroup().location
+  kind: 'OpenAI'
+  sku: {
+    name: 'S0'
+  }
+  properties: {
+    customSubDomainName: 'adlerbot1-openai'
+    networkAcls: {
+      defaultAction: 'Allow'
+    }
+  }
+}

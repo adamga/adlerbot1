@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Azure;
 using Azure.AI.TextAnalytics;
+using Azure.AI.Language.Conversations; // Added for Azure OpenAI SDK
 
 namespace ServerApi.Controllers
 {
@@ -14,10 +15,12 @@ namespace ServerApi.Controllers
         private static readonly List<string> messages = new List<string>();
 
         private readonly TextAnalyticsClient _textAnalyticsClient;
+        private readonly ConversationsClient _conversationsClient; // Added for Azure OpenAI SDK
 
-        public ChatController(TextAnalyticsClient textAnalyticsClient)
+        public ChatController(TextAnalyticsClient textAnalyticsClient, ConversationsClient conversationsClient)
         {
             _textAnalyticsClient = textAnalyticsClient;
+            _conversationsClient = conversationsClient; // Added for Azure OpenAI SDK
         }
 
         // POST api/chat/send
@@ -38,9 +41,11 @@ namespace ServerApi.Controllers
 
         private async Task<string> CallAzureOpenAI(string message)
         {
-            // This method should implement the call to Azure OpenAI and return the response
-            // Placeholder for Azure OpenAI call
-            return $"Response to '{message}' from Azure OpenAI";
+            // Implementing the actual call to Azure OpenAI using the Azure OpenAI SDK
+            var options = new ConversationAnalysisClientOptions();
+            var client = new ConversationAnalysisClient(new Uri("Your Azure OpenAI Endpoint"), new AzureKeyCredential("Your Azure OpenAI Key"), options);
+            var result = await client.AnalyzeConversationAsync(new ConversationAnalysisOptions(message));
+            return result.Value.ToString();
         }
     }
 }
