@@ -17,3 +17,11 @@ az deployment group create --resource-group <YourResourceGroupName> --template-f
 Replace `<YourResourceGroupName>` with the name of your Azure resource group.
 
 For more detailed instructions and troubleshooting, refer to the official Azure Bicep documentation.
+
+## Deploying Azure OpenAI Services
+
+To include Azure OpenAI services in your deployment, follow these additional steps:
+
+1. Ensure the `main.bicep` file includes the Azure Cognitive Services with the OpenAI API as described in the updated `main.bicep` documentation.
+2. Deploy or update your Azure resources using the Azure CLI with the updated `main.bicep` file to include Azure OpenAI services.
+3. Verify the deployment of Azure OpenAI services in your Azure resource group to ensure they are correctly configured for use with Adlerbot1.
