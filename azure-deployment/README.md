@@ -25,3 +25,35 @@ To include Azure OpenAI services in your deployment, follow these additional ste
 1. Ensure the `main.bicep` file includes the Azure Cognitive Services with the OpenAI API as described in the updated `main.bicep` documentation.
 2. Deploy or update your Azure resources using the Azure CLI with the updated `main.bicep` file to include Azure OpenAI services.
 3. Verify the deployment of Azure OpenAI services in your Azure resource group to ensure they are correctly configured for use with Adlerbot1.
+
+## Deploying the React Native Mobile UI App
+
+To deploy the React Native mobile UI app, follow these steps:
+
+1. Ensure you have the necessary prerequisites installed on your development machine, including Node.js, npm, React Native CLI, Android Studio (for Android development), or Xcode (for iOS development).
+2. Navigate to the `chatbot-mobile-ui` directory in your terminal.
+3. Install the project dependencies by running the following command:
+
+```bash
+npm install
+```
+
+4. Start the Metro bundler by running the following command:
+
+```bash
+npm start
+```
+
+5. Build and run the app on the desired platform (Android or iOS) by running the appropriate command:
+
+```bash
+npm run android
+```
+
+or
+
+```bash
+npm run ios
+```
+
+For more detailed instructions and troubleshooting, refer to the official React Native documentation.
