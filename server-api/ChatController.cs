@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Azure;
 using Azure.AI.TextAnalytics;
-using Azure.AI.Language.Conversations; // Added for Azure OpenAI SDK
+using Azure.AI.Language.Conversations;
+using Microsoft.EntityFrameworkCore;
 
 namespace ServerApi.Controllers
 {
@@ -11,16 +12,15 @@ namespace ServerApi.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
-        // This is a simple in-memory store for chat messages
-        private static readonly List<string> messages = new List<string>();
-
+        private readonly ChatContext _context;
         private readonly TextAnalyticsClient _textAnalyticsClient;
-        private readonly ConversationsClient _conversationsClient; // Added for Azure OpenAI SDK
+        private readonly ConversationsClient _conversationsClient;
 
-        public ChatController(TextAnalyticsClient textAnalyticsClient, ConversationsClient conversationsClient)
+        public ChatController(ChatContext context, TextAnalyticsClient textAnalyticsClient, ConversationsClient conversationsClient)
         {
+            _context = context;
             _textAnalyticsClient = textAnalyticsClient;
-            _conversationsClient = conversationsClient; // Added for Azure OpenAI SDK
+            _conversationsClient = conversationsClient;
         }
 
         // POST api/chat/send
@@ -28,20 +28,26 @@ namespace ServerApi.Controllers
         public async Task<ActionResult> SendMessage([FromBody] string message)
         {
             var response = await CallAzureOpenAI(message);
-            messages.Add(response);
+            var chatMessage = new ChatMessage
+            {
+                Message = response,
+                Timestamp = DateTime.UtcNow
+            };
+            _context.ChatMessages.Add(chatMessage);
+            await _context.SaveChangesAsync();
             return Ok("Message received and processed");
         }
 
         // GET api/chat/receive
         [HttpGet("receive")]
-        public ActionResult<IEnumerable<string>> ReceiveMessages()
+        public async Task<ActionResult<IEnumerable<string>>> ReceiveMessages()
         {
+            var messages = await _context.ChatMessages.ToListAsync();
             return Ok(messages);
         }
 
         private async Task<string> CallAzureOpenAI(string message)
         {
-            // Implementing the actual call to Azure OpenAI using the Azure OpenAI SDK
             var options = new ConversationAnalysisClientOptions();
             var client = new ConversationAnalysisClient(new Uri("Your Azure OpenAI Endpoint"), new AzureKeyCredential("Your Azure OpenAI Key"), options);
             var result = await client.AnalyzeConversationAsync(new ConversationAnalysisOptions(message));
