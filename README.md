@@ -20,6 +20,54 @@ Deploying Azure OpenAI services is crucial for enabling the advanced AI capabili
 
 For detailed instructions on deploying Azure OpenAI services, refer to the `azure-deployment/README.md`.
 
+## Setting Up and Using the SQL Server Database
+
+Follow these instructions to set up and use the SQL Server database for tracking stats in the Adlerbot1 project:
+
+### Setting Up the SQL Server Database
+
+1. Ensure you have an Azure account and are logged in to the Azure portal.
+2. Navigate to the `azure-deployment` directory and update the `main.bicep` file to include the SQL Server and SQL Database resources.
+3. Deploy the updated Bicep template to Azure using the Azure CLI or through the Azure portal:
+
+```bash
+az deployment group create --resource-group <YourResourceGroupName> --template-file main.bicep
+```
+
+Replace `<YourResourceGroupName>` with the name of your Azure resource group.
+
+4. Verify the deployment of the SQL Server and SQL Database resources in your Azure resource group.
+
+### Configuring the Connection String
+
+1. Navigate to the `server-api` directory.
+2. Open the `appsettings.json` file.
+3. Add the connection string for the SQL Server database:
+
+```json
+{
+  "ConnectionStrings": {
+    "ChatDatabase": "Server=tcp:<YourSqlServerName>.database.windows.net,1433;Initial Catalog=<YourDatabaseName>;Persist Security Info=False;User ID=<YourSqlAdminUsername>;Password=<YourSqlAdminPassword>;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  }
+}
+```
+
+Replace `<YourSqlServerName>`, `<YourDatabaseName>`, `<YourSqlAdminUsername>`, and `<YourSqlAdminPassword>` with the appropriate values for your SQL Server and database.
+
+### Deploying the Updated Bicep Template
+
+1. Ensure you have the Azure CLI installed and logged in to your Azure account.
+2. Navigate to the `azure-deployment` directory in your terminal.
+3. Run the following command to deploy the updated Bicep template to Azure:
+
+```bash
+az deployment group create --resource-group <YourResourceGroupName> --template-file main.bicep
+```
+
+Replace `<YourResourceGroupName>` with the name of your Azure resource group.
+
+For more detailed instructions and troubleshooting, refer to the official Azure Bicep documentation.
+
 ## Setting Up and Running the React Native Mobile UI App
 
 Follow these instructions to set up and run the React Native mobile UI app:

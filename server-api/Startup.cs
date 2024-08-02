@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace ServerApi
 {
@@ -24,6 +25,10 @@ namespace ServerApi
                 ApiKey = Configuration["AzureOpenAI:ApiKey"],
                 Endpoint = Configuration["AzureOpenAI:Endpoint"]
             });
+
+            // Add DbContext for SQL Server
+            services.AddDbContext<ChatContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("ChatDatabase")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -47,5 +52,21 @@ namespace ServerApi
     {
         public string ApiKey { get; set; }
         public string Endpoint { get; set; }
+    }
+
+    public class ChatContext : DbContext
+    {
+        public ChatContext(DbContextOptions<ChatContext> options) : base(options)
+        {
+        }
+
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+    }
+
+    public class ChatMessage
+    {
+        public int Id { get; set; }
+        public string Message { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }
